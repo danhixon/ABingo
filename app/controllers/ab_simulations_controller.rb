@@ -1,3 +1,9 @@
+# this controller is kind of just for fun to build some simulated data.
+# visit /ab/simulations, refresh the page and click the links willy-nilly
+# and the data will be added to your database.  
+#
+# You may wish to lock this down with a before_filter like the reports controller
+# 
 class AbSimulationsController < ApplicationController
   unloadable
   def index

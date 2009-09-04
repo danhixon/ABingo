@@ -88,11 +88,14 @@ def set_abingo_identity
   end
 end
 
-3) OPTIONSAL: A basic report has been added to display your experiments:
+3) OPTIONAL: A basic report has been added to display your experiments:
 Add this to your routes file:
 	Abingo::Routes.reports_ui(map)
 And the reports will be at the following path:
 	/ab/tests
+
+Be sure to fill in the "authorize" method in the ab_reports_controller.rb to keep
+prying eyes out of your data.
 
 Some recommended styles to add to your stylesheet:
 	table { font-size: 11px; font-family:arial; border:solid 1px #888;border-right:none; }

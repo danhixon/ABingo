@@ -1,5 +1,6 @@
 class AbReportsController < ApplicationController
   unloadable
+  #replace this authorize method with your own if you have one already
   before_filter :authorize
   def tests
     @criteria = params["criteria"] || { "start_date" => 7.days.ago.to_s(:en), "end_date" => 1.days.ago.to_s(:en) }
@@ -14,16 +15,9 @@ class AbReportsController < ApplicationController
   
   private
   def authorize
-    flash[:notice] = "You must be a website administrator to view reports."
-    #redirect_to new_user_session_url unless admin?
+    #if !admin?
+    #  flash[:notice] = "You must be a website administrator to view reports."
+    #  redirect_to new_user_session_url
+    #end
   end
 end
-=begin
-suggested styles:
-
-table { font-size: 11px; font-family:arial; border:solid 1px #888;border-right:none; }
-th { border-bottom: solid 1px #666;border-right: solid 1px #888; background: #ddd;}
-td { border-right: solid 1px #888; text-align: right;}
-tr.total td { border-top:solid 1px #666; font-weight:bold;}
-
-=end
