@@ -1,0 +1,11 @@
+<% ab_test("Gadget Give-Away", %w(iPod DigitalCamera Zune)) do |gadget| %>
+	<p><%= link_to "Click here for you free #{gadget}", simulations_path + "/gadgets" %></p>
+<% end %>
+
+<% ab_test("September 2009 Price Offer", %w(19.99 17.99)) do |offer| %>
+	<p><%= link_to offer, simulations_path + "/price" %></p>
+<% end %>
+
+<% ab_test("August 2009 Offer", ["$19.99 installation, $4.99/month","free installation, $7.99/month"]) do |offer| %>
+	<p><%= link_to offer, simulations_path + "/offer" %></p>
+<% end %>

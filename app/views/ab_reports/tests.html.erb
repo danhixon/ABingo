@@ -1,0 +1,51 @@
+<style>
+	.footnote { font-size:12px;}
+	p {font-size:10px;} 
+</style>
+<h2>A/B Tests</h2>
+<% form_for 'criteria',:url=>{:controller=>'ab_reports', :action=>'tests'} do |f| %>
+<div class="form" style="display:none">	
+	<p>
+		Start Date:&nbsp;<%= f.text_field :start_date, :class=>"text", :maxlength=>10, :size=>12 %>
+		End Date:&nbsp;<%= f.text_field :end_date, :class=>"text", :maxlength=>10, :size=>12 %>
+		<%= f.submit "Show" %>
+	</p>
+</div>
+<% end %>
+
+<% @tests.each do |test| %>
+<h3>TEST: <%= test.test_name %></h3>
+<table cellpadding="4" cellspacing="0">
+	<tr>
+		<th>Alternatives</th>
+		<th>Weight</th>
+		<th>Participants</th>
+		<th>Responses</th>
+		<th>%</th>
+	</tr>
+	<% test.alternatives.each do |alt| %>
+	<tr>
+		<td><%= alt.content %></td>
+		<td><%= alt.weight %></td>
+		<td><%= alt.participants %></td>
+		<td><%= alt.conversions %></td>
+		<td><%= alt.pretty_conversion_rate %></td>
+	</tr>
+	<% end %>
+	<tr class="total">
+		<td>Total</td>
+		<td>1</td>
+		<td><%= test.participants %></td>
+		<td><%= test.conversions %></td>
+		<td><%= test.pretty_conversion_rate %></td>
+	</tr>
+	
+</table>
+<% test.describe_results_in_paragraphs.each do |p| %>
+	<p><%= p %></p>
+<% end %>
+<% end %>
+
+<div class="footnote">
+	These test can't measure the magnitude of the statistical difference in response rates.
+</div>

@@ -4,7 +4,7 @@ A/Bingo
 Rails A/B testing.  One minute to install.  One line to set up a new A/B test.
 One line to track conversion.
 
-For usage notes, see: http://www.bingocardcreator.com/abingo
+For original usage notes, see: http://www.bingocardcreator.com/abingo
 
 Installation instructions are below usage examples.
 
@@ -113,6 +113,19 @@ A/Bingo defaults to using the same cache store as Rails.  If you want to change 
 
 #production.rb
 Abingo.cache = ActiveSupport::Cache::MemCacheStore.new("cache.example.com:12345") #best if really memcacheDB
+
+4) REPORTS: A basic report has been added to display your experiments:
+Add this to your routes file:
+	Abingo::Routes.reports_ui(map)
+And the reports will be at the following path:
+	/ab/tests
+
+Some recommended styles to add to your stylesheet:
+	table { font-size: 11px; font-family:arial; border:solid 1px #888;border-right:none; }
+	th { border-bottom: solid 1px #666;border-right: solid 1px #888; background: #ddd;}
+	td { border-right: solid 1px #888; text-align: right;}
+	tr.total td { border-top:solid 1px #666; font-weight:bold;}
+
 
 
 Copyright (c) 2009 Patrick McKenzie, released under the MIT license

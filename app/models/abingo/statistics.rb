@@ -30,7 +30,11 @@ module Abingo::Statistics
 
     numerator / ((frac1 + frac2) ** 0.5)
   end
-
+  def zscore2
+    # the first alternative is the "control"
+    (datapoint - mean) / standard_deviation
+    
+  end
   def p_value
     index = 0
     z = zscore
@@ -44,7 +48,28 @@ module Abingo::Statistics
     end
     found_p
   end
+  def variance(population)
+    n = 0
+    mean = 0.0
+    s = 0.0
+    population.each { |x|
+      n = n + 1
+      delta = x – mean
+      mean = mean + (delta / n)
+      s = s + delta * (x – mean)
+    }
+    # if you want to calculate std deviation
+    # of a sample change this to "s / (n-1)"
+    return s / (n-1)
+  end
 
+  # calculate the standard deviation of a population
+  # accepts: an array, the population
+  # returns: the standard deviation
+  def standard_deviation(population)
+    Math.sqrt(variance(population))
+  end
+  
   def is_statistically_significant?(p = 0.05)
     p_value <= p
   end
@@ -54,37 +79,40 @@ module Abingo::Statistics
   end
 
   def describe_result_in_words
+    describe_results_in_paragraphs.join(" ")
+  end
+  def describe_results_in_paragraphs
+    paragraphs = []
     begin
       z = zscore
-    rescue
-      return "Could not execute the significance test because one or more of the alternatives has not been seen yet."
+    rescue Exception => ex
+      paragraphs << ex.message
+      return paragraphs
     end
     p = p_value
 
-    words = ""
     if (alternatives[0].participants < 10) || (alternatives[1].participants < 10)
-      words += "Take these results with a grain of salt since your samples are so small: "
+      paragraphs << "The sample is currently too small to yield accurate results."
     end
 
     alts = alternatives - [best_alternative]
     worst_alternative = alts.first
 
-    words += "The best alternative you have is: [#{best_alternative.pretty_content}], which had "
-    words += "#{best_alternative.conversions} conversions from #{best_alternative.participants} participants "
-    words += "(#{best_alternative.pretty_conversion_rate}).  The other alternative was [#{worst_alternative.pretty_content}], "
-    words += "which had #{worst_alternative.conversions} conversions from #{worst_alternative.participants} participants "
-    words += "(#{worst_alternative.pretty_conversion_rate}).  "
+    #words += "The best alternative you have is: [#{best_alternative.content}], which had "
+    #words += "#{best_alternative.conversions} conversions from #{best_alternative.participants} participants "
+    #words += "(#{best_alternative.pretty_conversion_rate}).  The other alternative was [#{worst_alternative.content}], "
+    #words += "which had #{worst_alternative.conversions} conversions from #{worst_alternative.participants} participants "
+    #words += "(#{worst_alternative.pretty_conversion_rate}).  "
 
     if (p.nil?)
-      words += "However, this difference is not statistically significant."
+      paragraphs << "The difference above is not statistically significant."
     else
-      words += "This difference is #{PERCENTAGES[p]} likely to be statistically significant, which means you can be "
-      words += "#{DESCRIPTION_IN_WORDS[p]} that it is the result of your alternatives actually mattering, rather than "
-      words += "being due to random chance.  However, this statistical test can't measure how likely the currently "
-      words += "observed magnitude of the difference is to be accurate or not.  It only says \"better\", not \"better "
-      words += "by so much\"."
+      words = "Results are #{PERCENTAGES[p]} likely to be statistically significant. You can be "
+      words += "#{DESCRIPTION_IN_WORDS[p]} that the difference in response rates is explained by the  "
+      words += "alternatives and not due to random chance. "
+      paragraphs << words
     end
-    words
+    paragraphs
   end
 
 end

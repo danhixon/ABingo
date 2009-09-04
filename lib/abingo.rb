@@ -1,3 +1,5 @@
+require 'hash_extension'
+#require File.join(File.dirname(__FILE__), "/../app/controllers/ab_reports")
 #This class is outside code's main interface into the ABingo A/B testing framework.
 #Unless you're fiddling with implementation details, it is the only one you need worry about.
 
@@ -58,11 +60,14 @@ class Abingo
 
     choice = self.find_alternative_for_user(test_name, alternatives)
     participating_tests = Abingo.cache.read("Abingo::participating_tests::#{Abingo.identity}") || []
-    
+  
     #Set this user to participate in this experiment, and increment participants count.
     if options[:multiple_participation] || !(participating_tests.include?(test_name))
-      participating_tests << test_name unless participating_tests.include?(test_name)
-      Abingo.cache.write("Abingo::participating_tests::#{Abingo.identity}", participating_tests)
+      unless participating_tests.include?(test_name)
+        participating_tests = participating_tests.dup if participating_tests.frozen?
+        participating_tests << test_name
+        Abingo.cache.write("Abingo::participating_tests::#{Abingo.identity}", participating_tests)
+      end
       Abingo::Alternative.score_participation(test_name)
     end
 
@@ -127,7 +132,7 @@ class Abingo
         if value.kind_of? Integer
           alternatives_array += [key] * value
         else
-          raise "You gave an array with #{value} as a value.  It needed to be an integer."
+          raise "You gave a hash with #{key} => #{value} as an element.  The value must be an integral weight."
         end
       end
       return alternatives_array
