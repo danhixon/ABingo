@@ -133,7 +133,13 @@ A/Bingo defaults to using the same cache store as Rails.  If you want to change 
 #production.rb
 Abingo.cache = ActiveSupport::Cache::MemCacheStore.new("cache.example.com:12345") #best if really memcacheDB
 
+======
+TROUBLESHOOTING
 
+In Rails 2.3.2 when using the reports it seems this error is raised sometimes:
+Abingo is not missing constant Alternative!
+
+See here for patch: https://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/2283-unnecessary-exception-raised-in-asdependenciesload_missing_constant
 
 
 Copyright (c) 2009 Patrick McKenzie, released under the MIT license
