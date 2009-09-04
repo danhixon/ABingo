@@ -62,9 +62,12 @@ Abingo::Experiment.last.describe_result_in_words
 Installation
 =======
 
+0) INSTALL PLUGIN:
+$ script/plugin install git://github.com/danhixon/ABingo.git
+
 1)  REQUIRED: You'll need to generate a DB migration to prepare two tables, 
-then migrate your database.  (Note: slight edits required if you use the table names
-"experiments" or "alternatives" at present.)
+then migrate your database.  (Note: slight edits required if you can't the table names
+"experiments" or "alternatives".)
 
 ruby script/generate abingo_migration
 rake db:migrate
@@ -85,7 +88,20 @@ def set_abingo_identity
   end
 end
 
-3)  HIGHLY RECOMMENDED: All the A/Bingo methods are accessible from the class Abingo (note capitalization!).
+3) OPTIONSAL: A basic report has been added to display your experiments:
+Add this to your routes file:
+	Abingo::Routes.reports_ui(map)
+And the reports will be at the following path:
+	/ab/tests
+
+Some recommended styles to add to your stylesheet:
+	table { font-size: 11px; font-family:arial; border:solid 1px #888;border-right:none; }
+	th { border-bottom: solid 1px #666;border-right: solid 1px #888; background: #ddd;}
+	td { border-right: solid 1px #888; text-align: right;}
+	tr.total td { border-top:solid 1px #666; font-weight:bold;}
+
+
+4)  HIGHLY RECOMMENDED: All the A/Bingo methods are accessible from the class Abingo (note capitalization!).
 However, you can get some nice syntactical sugar by doing the following
 
 #Within ApplicationController
@@ -94,7 +110,7 @@ However, you can get some nice syntactical sugar by doing the following
 #Within ApplicationHelper
   include AbingoViewHelper
 
-3)  RECOMMENDED: A/Bingo makes HEAVY use of the cache to reduce load on the
+5)  RECOMMENDED: A/Bingo makes HEAVY use of the cache to reduce load on the
 database and share potentially long-lived "temporary" data, such as what alternative
 a given visitor should be shown for a particular test.  You SHOULD use a cache
 which is shared across all Rails processes -- that probably means MemcachedStore,
@@ -114,17 +130,6 @@ A/Bingo defaults to using the same cache store as Rails.  If you want to change 
 #production.rb
 Abingo.cache = ActiveSupport::Cache::MemCacheStore.new("cache.example.com:12345") #best if really memcacheDB
 
-4) REPORTS: A basic report has been added to display your experiments:
-Add this to your routes file:
-	Abingo::Routes.reports_ui(map)
-And the reports will be at the following path:
-	/ab/tests
-
-Some recommended styles to add to your stylesheet:
-	table { font-size: 11px; font-family:arial; border:solid 1px #888;border-right:none; }
-	th { border-bottom: solid 1px #666;border-right: solid 1px #888; background: #ddd;}
-	td { border-right: solid 1px #888; text-align: right;}
-	tr.total td { border-top:solid 1px #666; font-weight:bold;}
 
 
 
