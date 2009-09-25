@@ -8,7 +8,7 @@ class AbingoMigration < ActiveRecord::Migration
     end
 
     add_index "experiments", "test_name"
-    add_index "experiments", "created_on"
+    add_index "experiments", "created_at"
 
     create_table "alternatives", :force => true do |t|
       t.string :experiment_id
