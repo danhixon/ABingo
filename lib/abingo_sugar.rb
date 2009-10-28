@@ -4,7 +4,7 @@
 #See abingo.rb for descriptions of what these do.
 
 module AbingoSugar
-
+  protected
   def ab_test(test_name, alternatives = nil, options = {})
     if (alternatives.nil?)
       choice = Abingo.flip(test_name)
