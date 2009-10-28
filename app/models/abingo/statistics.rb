@@ -54,9 +54,9 @@ module Abingo::Statistics
     s = 0.0
     population.each { |x|
       n = n + 1
-      delta = x – mean
+      delta = (x–mean)
       mean = mean + (delta / n)
-      s = s + delta * (x – mean)
+      s = s + (delta*(x–mean))
     }
     # if you want to calculate std deviation
     # of a sample change this to "s / (n-1)"
